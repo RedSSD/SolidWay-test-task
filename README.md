@@ -1,0 +1,1 @@
+# SolidWay-test-task
