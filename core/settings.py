@@ -28,7 +28,6 @@ SECRET_KEY = config("SECRET_KEY")
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    "localhost",
 ]
 
 
@@ -46,7 +45,9 @@ INSTALLED_APPS = [
     "rest_framework.authtoken",
     "djoser",
     # authentication app
-    'authentication'
+    'authentication',
+    # article app
+    "articles",
 ]
 
 MIDDLEWARE = [
