@@ -27,7 +27,9 @@ SECRET_KEY = config("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    "localhost",
+]
 
 
 # Application definition
@@ -41,7 +43,8 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     # 3rd party
     "rest_framework",
-    "rest_framework_simplejwt.token_blacklist",
+    "rest_framework.authtoken",
+    "djoser",
     # authentication app
     'authentication'
 ]
@@ -133,16 +136,36 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
-        "rest_framework_simplejwt.authentication.JWTAuthentication",
-    )
+        "authentication.authentication.DjoserTokenAuthentication",
+    ),
+    "DEFAULT_PERMISSION_CLASSES": ["rest_framework.permissions.AllowAny"],
 }
 
-# TODO Change ACCESS_TOKEN_LIFETIME to 1-3 minutes
-ACCESS_TOKEN_LIFETIME = timedelta(days=1)
-REFRESH_TOKEN_LIFETIME = timedelta(days=5)
-
-SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": ACCESS_TOKEN_LIFETIME,
-    "REFRESH_TOKEN_LIFETIME": REFRESH_TOKEN_LIFETIME,
-    "USER_ID_FIELD": "uuid",
+DJOSER = {
+    "PASSWORD_RESET_CONFIRM_URL": "password/reset/confirm/{uid}/{token}",
+    "PASSWORD_RESET_CONFIRM_RETYPE": False,
+    "PASSWORD_RESET_SHOW_EMAIL_NOT_FOUND": True,
+    "ACTIVATION_URL": "activate/{uid}/{token}",
+    "SEND_ACTIVATION_EMAIL": False,
+    "SEND_CONFIRMATION_EMAIL": False,
+    "LOGIN_FIELD": "email",
+    "USER_CREATE_PASSWORD_RETYPE": False,
+    "PERMISSIONS": {
+        "user_delete": ["rest_framework.permissions.IsAdminUser"],
+        "user_list": ["rest_framework.permissions.IsAdminUser"],
+    },
+    "SERIALIZERS": {
+        "user_create_password_retype": "authentication.serializers.UserRegistrationSerializer",
+    },
 }
+
+
+TOKEN_EXPIRATION_TIME = timedelta(days=14)
+
+EMAIL_BACKEND = config("EMAIL_BACKEND")
+EMAIL_HOST = config("EMAIL_HOST")
+EMAIL_PORT = config("EMAIL_PORT")
+EMAIL_USE_TLS = config("EMAIL_USE_TLS")
+EMAIL_HOST_USER = config("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD")
+

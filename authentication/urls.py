@@ -1,12 +1,11 @@
-from django.urls import path
-from .views import (
-    JWTTokenObtainPairView,
-    JWTTokenRefreshView,
-    JWTTokenBlacklistView
-)
+from django.urls import path, include, re_path
+
+from .views import UserDetailView
+
+app_name = 'authentication'
 
 urlpatterns = [
-    path('token/login/', JWTTokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('token/refresh/', JWTTokenRefreshView.as_view(), name='token_refresh'),
-    path('token/logout/', JWTTokenBlacklistView.as_view(), name='token_blacklist'),
+    path('auth/', include('djoser.urls')),
+    re_path(r"^auth/", include("djoser.urls.authtoken")),
+    path('users/<int:pk>/', UserDetailView.as_view(), name='user_detail_view'),
 ]

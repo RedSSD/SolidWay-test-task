@@ -1,68 +1,60 @@
-from annoying.functions import get_object_or_None
-from django.contrib.auth import authenticate
-from django.contrib.auth.hashers import check_password
+from collections import defaultdict
+
+from django.core.exceptions import ValidationError
+from djoser.serializers import UserCreatePasswordRetypeSerializer
+
 from rest_framework import serializers
-from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-from rest_framework_simplejwt.tokens import RefreshToken, TokenError
 
 from .models import CustomUser
-from authentication.exceptions import (
-    UserNotFoundError,
-    WrongPasswordError,
-    UserNotActivatedError
-)
+
+from .validation import validate_password
 
 
-class JWTTokenObtainPairSerializer(TokenObtainPairSerializer):
-    username_field = "email"
+class UserRegistrationSerializer(UserCreatePasswordRetypeSerializer):
+    email = serializers.EmailField(
+        write_only=True,
+    )
+    password = serializers.CharField(
+        style={"input_type": "password"}, write_only=True
+    )
 
-    def validate(self, attrs):
-        user = get_object_or_None(CustomUser, email=attrs[self.username_field])
-        if not user:
-            raise UserNotFoundError
-        if not check_password(attrs["password"], user.password):
-            raise WrongPasswordError
-        if not user.is_active:
-            raise UserNotActivatedError
-        self.user = authenticate(
-            **{
-                self.username_field: attrs[self.username_field],
-                "password": attrs["password"],
-            }
-        )
-        if not self.user:
-            raise serializers.ValidationError(
-                "Not found account with the given credentials",
-                code="authentication",
-            )
-
-        refresh = self.get_token(self.user)
-        data = {
-            "refresh": str(refresh),
-            "access": str(refresh.access_token),
-        }
-
-        return data
-
-    @classmethod
-    def get_token(cls, user):
-        token = RefreshToken.for_user(user)
-        return token
-
-
-class JWTTokenBlacklistSerializer(serializers.Serializer):
-    refresh = serializers.CharField()
-
-    default_error_messages = {
-        "invalid_token": "Token is expired or invalid.",
-    }
+    class Meta(UserCreatePasswordRetypeSerializer.Meta):
+        model = CustomUser
+        fields = ("email", "password", "fullname")
 
     def validate(self, attrs):
-        self.token = attrs["refresh"]
-        return attrs
+        custom_errors = defaultdict(list)
+        email = attrs.get('email').lower()
+        password = attrs.get('password')
+        re_password = attrs.pop('re_password')
 
-    def save(self, **kwargs):
+        if CustomUser.objects.filter(email=email).exists():
+            custom_errors['email'].append('Email already registered')
+        else:
+            attrs['email'] = email
+
+        if re_password != password:
+            custom_errors['password'].append('Passwords do not match')
+
         try:
-            RefreshToken(self.token).blacklist()
-        except TokenError:
-            self.fail("invalid_token")
+            validate_password(password)
+        except ValidationError as error:
+            custom_errors['password'].append(error.message)
+
+        print(attrs)
+
+        if custom_errors:
+            print(custom_errors)
+            raise ValidationError(custom_errors)
+        else:
+            return attrs
+
+
+class UserSerializer(serializers.ModelSerializer):
+    email = serializers.ReadOnlyField()
+
+    class Meta:
+        model = CustomUser
+        fields = ('email', 'fullname', 'avatar')
+        read_only_fields = ('email',)
+

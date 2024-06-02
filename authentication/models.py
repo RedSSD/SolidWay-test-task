@@ -1,28 +1,26 @@
-from uuid import uuid4
-
 from django.db import models
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.base_user import AbstractBaseUser
+from django.contrib.auth.models import PermissionsMixin
 
 from .managers import CustomUserManager
 
 
-class CoreModel(models.Model):
-    uuid = models.UUIDField(primary_key=True, default=uuid4, editable=False)
-    create_at = models.DateTimeField(
-        auto_now_add=True, db_index=True, verbose_name="created"
-    )
-    update_at = models.DateTimeField(auto_now=True, verbose_name="updated")
-
-    class Meta:
-        abstract = True
-
-
-class CustomUser(AbstractUser, CoreModel):
-    full_name = models.CharField(max_length=255, blank=False, null=False)
+class CustomUser(AbstractBaseUser, PermissionsMixin):
+    fullname = models.CharField(max_length=255, blank=False, null=False)
     email = models.EmailField(unique=True)
-    avatar = models.ImageField()
+    avatar = models.ImageField(blank=True, null=True, upload_to='avatars')
+
+    is_active = models.BooleanField(default=False)
+    is_staff = models.BooleanField(default=False)
+    is_superuser = models.BooleanField(default=False)
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = []
+    EMAIL_FIELD = 'email'
+    REQUIRED_FIELDS = [
+        'fullname',
+    ]
 
     objects = CustomUserManager()
+
+    def __str__(self):
+        return self.email
