@@ -1,10 +1,15 @@
-from django.shortcuts import get_object_or_404
+from rest_framework.generics import get_object_or_404
 
-from rest_framework.generics import ListAPIView, RetrieveUpdateDestroyAPIView, CreateAPIView
+from rest_framework.generics import (
+    ListAPIView,
+    RetrieveUpdateDestroyAPIView,
+    CreateAPIView,
+    RetrieveAPIView
+)
 from rest_framework.permissions import IsAuthenticated
 
 from .models import Article
-from .serializer import ArticleListSerializer, ArticleDetailSerializer
+from .serializer import ArticleListSerializer, ArticleDetailSerializer, ArticleLatestSerializer
 from .permissions import UserIsArticleAuthorOrReadOnly
 
 
@@ -17,6 +22,13 @@ class ArticleDetailAPIView(RetrieveUpdateDestroyAPIView):
     queryset = Article.objects.all()
     serializer_class = ArticleDetailSerializer
     permission_classes = (IsAuthenticated, UserIsArticleAuthorOrReadOnly)
+
+
+class ArticleLatestAPIView(RetrieveAPIView):
+    serializer_class = ArticleLatestSerializer
+
+    def get_object(self):
+        return Article.objects.latest("publication_date")
 
 
 class ArticleCreateAPIView(CreateAPIView):

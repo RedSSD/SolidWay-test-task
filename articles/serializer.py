@@ -1,5 +1,6 @@
 from rest_framework import serializers
 
+from core.settings import BASE_API_URL
 from articles.models import Article
 
 
@@ -23,3 +24,18 @@ class ArticleDetailSerializer(serializers.ModelSerializer):
 
     def get_author(self, obj):
         return obj.author.fullname
+
+
+class ArticleLatestSerializer(serializers.ModelSerializer):
+    author = serializers.SerializerMethodField()
+    article_url = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Article
+        fields = ("title", "author", "article_url")
+
+    def get_author(self, obj):
+        return obj.author.fullname
+
+    def get_article_url(self, obj):
+        return BASE_API_URL + f"articles/{obj.pk}/"

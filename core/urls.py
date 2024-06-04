@@ -18,9 +18,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+from authentication.views import AvatarRetrieveAPIView
+
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/v1/", include("authentication.urls")),
     path("api/v1/", include("articles.urls")),
-
+    path("avatars/<str:filename>", AvatarRetrieveAPIView.as_view(), name="avatar"),
 ]
