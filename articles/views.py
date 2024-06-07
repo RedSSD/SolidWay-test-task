@@ -1,5 +1,3 @@
-from rest_framework.generics import get_object_or_404
-
 from rest_framework.generics import (
     ListAPIView,
     RetrieveUpdateDestroyAPIView,
@@ -11,6 +9,8 @@ from rest_framework.permissions import IsAuthenticated
 from .models import Article
 from .serializer import ArticleListSerializer, ArticleDetailSerializer, ArticleLatestSerializer
 from .permissions import UserIsArticleAuthorOrReadOnly
+
+from bot.api_interactor import bot_notify_subscribers
 
 
 class ArticleListAPIView(ListAPIView):
@@ -42,3 +42,4 @@ class ArticleCreateAPIView(CreateAPIView):
 
     def perform_create(self, serializer):
         serializer.save(author=self.current_user())
+        bot_notify_subscribers(serializer.data)

@@ -9,3 +9,10 @@ class Article(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class NotificationSubscriber(models.Model):
+    telegram_chat_id = models.CharField(max_length=12, blank=False, null=False)
+
+    def __str__(self):
+        return self.telegram_chat_id
