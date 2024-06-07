@@ -53,4 +53,3 @@ async def subscribe_handler(msg: Message):
     await msg.answer(
         answer
     )
-

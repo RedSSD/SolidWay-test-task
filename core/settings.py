@@ -31,6 +31,10 @@ ALLOWED_HOSTS = [
 ]
 
 BASE_API_URL = "http://127.0.0.1:8000/api/v1/"
+
+# Variable to create article url for telegram bot message
+BASE_FRONTEND_URL = BASE_API_URL
+
 # Application definition
 
 INSTALLED_APPS = [
