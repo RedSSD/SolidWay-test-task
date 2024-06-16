@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/5.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
-
+import os
 from pathlib import Path
 from datetime import timedelta
 from decouple import config
@@ -48,10 +48,19 @@ INSTALLED_APPS = [
     "rest_framework",
     "rest_framework.authtoken",
     "djoser",
+    "django_crontab",
+    # "django_cron"
     # authentication app
     'authentication',
     # article app
     "articles",
+]
+
+CRONJOBS = [
+    ('*/1 * * * *', 'articles.parser.ycombinator.article_parser_ycombinator', '>> %s 2>&1' % os.path.join(
+        BASE_DIR,
+        'parser.log'
+    )),
 ]
 
 MIDDLEWARE = [
@@ -177,4 +186,3 @@ EMAIL_PORT = config("EMAIL_PORT")
 EMAIL_USE_TLS = config("EMAIL_USE_TLS")
 EMAIL_HOST_USER = config("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD")
-

@@ -11,6 +11,15 @@ class Article(models.Model):
         return self.title
 
 
+class ThirdPartyArticle(models.Model):
+    title = models.CharField(max_length=255, blank=False, null=False)
+    url = models.URLField(blank=False, null=False)
+    publication_date = models.DateTimeField(auto_now_add=True, null=False)
+
+    def __str__(self):
+        return self.title
+
+
 class NotificationSubscriber(models.Model):
     telegram_chat_id = models.CharField(max_length=12, blank=False, null=False)
 
