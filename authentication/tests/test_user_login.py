@@ -21,7 +21,6 @@ class UserLoginAPITests(APITestCase):
             },
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        # self.assertEqual({"auth_token": AnyStr}, response.json())
         self.assertContains(response, "auth_token")
 
     def test_login_email_incorrect(self):
