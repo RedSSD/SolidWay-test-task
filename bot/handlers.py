@@ -31,7 +31,13 @@ async def start_handler(msg: Message):
 
 @router.message(Command("latest"))
 async def latest_handler(msg: Message):
-    latest_article = requests.get("http://localhost:8000/api/v1/articles/latest").json()
+    latest_article = requests.get("http://api:8000/api/v1/articles/latest/")
+
+    if latest_article.status_code != 200:
+        await msg.answer("Something went wrong")
+        return
+
+    latest_article = latest_article.json()
 
     await msg.answer(
         LATEST_ARTICLE_MESSAGE_TEMPLATE.format(

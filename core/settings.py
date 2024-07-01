@@ -28,6 +28,10 @@ SECRET_KEY = config("SECRET_KEY")
 DEBUG = True
 
 ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
+    '0.0.0.0',
+    'api'  # for docker
 ]
 
 BASE_API_URL = "http://127.0.0.1:8000/api/v1/"
@@ -49,7 +53,7 @@ INSTALLED_APPS = [
     "rest_framework.authtoken",
     "djoser",
     "django_crontab",
-    # "django_cron"
+    'django.contrib.postgres',
     # authentication app
     'authentication',
     # article app
@@ -57,10 +61,7 @@ INSTALLED_APPS = [
 ]
 
 CRONJOBS = [
-    ('*/1 * * * *', 'articles.parser.ycombinator.article_parser_ycombinator', '>> %s 2>&1' % os.path.join(
-        BASE_DIR,
-        'parser.log'
-    )),
+    ('*/5 * * * *', 'articles.parser.ycombinator.article_parser_ycombinator', f'>> {BASE_DIR}/parser_logs.log 2>&1'),
 ]
 
 MIDDLEWARE = [
