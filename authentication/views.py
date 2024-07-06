@@ -52,6 +52,3 @@ class AvatarDestroyAPIView(DestroyAPIView):
         instance.avatar.delete(save=False)
         instance.avatar = None
         instance.save()
-
-
-
