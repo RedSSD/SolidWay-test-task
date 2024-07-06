@@ -1,9 +1,11 @@
 from django.db import models
 
+from tinymce.models import HTMLField
+
 
 class Article(models.Model):
     title = models.CharField(max_length=255, blank=False, null=False)
-    content = models.TextField(blank=False, null=False)
+    content = HTMLField()
     publication_date = models.DateTimeField(auto_now_add=True, null=False)
     author = models.ForeignKey(to="authentication.CustomUser", on_delete=models.CASCADE)
 

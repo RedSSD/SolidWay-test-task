@@ -6,8 +6,13 @@ from rest_framework.generics import (
 )
 from rest_framework.permissions import IsAuthenticated
 
-from .models import Article
-from .serializer import ArticleListSerializer, ArticleDetailSerializer, ArticleLatestSerializer
+from .models import Article, ThirdPartyArticle
+from .serializer import (
+    ArticleListSerializer,
+    ArticleDetailSerializer,
+    ArticleLatestSerializer,
+    ThirdPartyArticleListSerializer
+)
 from .permissions import UserIsArticleAuthorOrReadOnly
 
 from bot.api_interactor import bot_notify_subscribers
@@ -43,3 +48,8 @@ class ArticleCreateAPIView(CreateAPIView):
     def perform_create(self, serializer):
         serializer.save(author=self.current_user())
         bot_notify_subscribers(serializer.data)
+
+
+class ThirdPartyArticleListAPIView(ListAPIView):
+    queryset = ThirdPartyArticle.objects.all()
+    serializer_class = ThirdPartyArticleListSerializer

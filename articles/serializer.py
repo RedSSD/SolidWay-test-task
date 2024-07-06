@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from core.settings import BASE_API_URL
-from articles.models import Article
+from articles.models import Article, ThirdPartyArticle
 
 
 class ArticleListSerializer(serializers.ModelSerializer):
@@ -39,3 +39,9 @@ class ArticleLatestSerializer(serializers.ModelSerializer):
 
     def get_article_url(self, obj):
         return BASE_API_URL + f"articles/{obj.pk}/"
+
+
+class ThirdPartyArticleListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ThirdPartyArticle
+        fields = "__all__"
