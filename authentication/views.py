@@ -21,6 +21,9 @@ class UserDetailAPIView(RetrieveUpdateDestroyAPIView):
     permission_classes = [IsAuthenticated, UserIsProfileOwnerOrReadOnly]
     serializer_class = UserSerializer
 
+    def get_object(self):
+        return self.request.user
+
     def perform_update(self, serializer):
         user = self.request.user
         if user.avatar:

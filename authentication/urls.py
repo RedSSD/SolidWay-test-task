@@ -7,5 +7,5 @@ app_name = 'authentication'
 urlpatterns = [
     path('auth/', include('djoser.urls')),
     re_path(r"^auth/", include("djoser.urls.authtoken")),
-    path('users/<int:pk>/', UserDetailAPIView.as_view(), name='user_detail_view'),
+    path('me/', UserDetailAPIView.as_view(), name='user_detail_view'),
 ]
