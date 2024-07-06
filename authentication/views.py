@@ -4,7 +4,7 @@ from django.http import FileResponse
 
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.generics import RetrieveUpdateDestroyAPIView
+from rest_framework.generics import RetrieveUpdateDestroyAPIView, DestroyAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.parsers import MultiPartParser
 from .models import CustomUser
@@ -39,3 +39,19 @@ class AvatarRetrieveAPIView(APIView):
             return FileResponse(open(file_path, 'rb'))
         else:
             return Response(status=404)
+
+
+class AvatarDestroyAPIView(DestroyAPIView):
+    permission_classes = [IsAuthenticated, UserIsProfileOwnerOrReadOnly]
+    serializer_class = UserSerializer
+
+    def get_object(self):
+        return self.request.user
+
+    def perform_destroy(self, instance):
+        instance.avatar.delete(save=False)
+        instance.avatar = None
+        instance.save()
+
+
+
