@@ -58,7 +58,7 @@ python3 manage.py createsuperuser
 ```
 ## Article requests
 
-Article list - GET request ```/articles/```
+Article list - GET request ```/articles/```___
 3rd Party article list - GET request ```/3rd-party-articles/```
 Article detail view - GET request ```/articles/<int:article_id>```
 Article list - GET request ```/articles/```
