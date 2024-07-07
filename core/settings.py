@@ -34,7 +34,7 @@ ALLOWED_HOSTS = [
     'api'  # for docker
 ]
 
-BASE_API_URL = "http://127.0.0.1:8000/api/v1/"
+BASE_API_URL = "http://0.0.0.0:8000/api/v1/"
 
 # Variable to create article url for telegram bot message
 BASE_FRONTEND_URL = BASE_API_URL

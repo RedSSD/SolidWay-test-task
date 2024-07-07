@@ -5,7 +5,6 @@ from djoser.serializers import UserCreatePasswordRetypeSerializer
 
 from rest_framework import serializers
 
-from core.settings import BASE_API_URL
 from .models import CustomUser
 from .validation import validate_password
 

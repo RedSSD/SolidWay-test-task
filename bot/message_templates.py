@@ -13,6 +13,7 @@ HELP_MESSAGE_TEMPLATE = (
     "/start - start bot\n"
     "/help - show bot commands\n"
     "/latest - show latest article\n"
+    "/subscribe - subscribe to news\n"
 )
 
 SUBSCRIPTION_MESSAGE_TEMPLATE = "You've successfully subscribed!"
