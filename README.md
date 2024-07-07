@@ -41,10 +41,10 @@ http://localhost:8000/password/reset/confirm/NA/c9p7rc-4c03c3c79729ce95d529f2fce
 5) Input new password and send request
 
 ## User requests
-User profile - GET request ```/me```
-User profile change - PATCH request ```/me/```
-User avatar delete - DELETE request ```/me/delete_avatar/```
-User profile delete - DELETE request ```/me/```
+User profile - GET request ```/me```  
+User profile change - PATCH request ```/me/```  
+User avatar delete - DELETE request ```/me/delete_avatar/```  
+User profile delete - DELETE request ```/me/```  
 #
 ##### Article is able to store simple text or HTML (if article have images, links, etc.)
 ##### To check this functionality create a superuser log in to Django admin panel.
@@ -58,10 +58,10 @@ python3 manage.py createsuperuser
 ```
 ## Article requests
 
-Article list - GET request ```/articles/```___
-3rd Party article list - GET request ```/3rd-party-articles/```
-Article detail view - GET request ```/articles/<int:article_id>```
-Article list - GET request ```/articles/```
-Create article - POST request ```/articles/create/```
-Update article - PATCH request ```/articles/<int:article_id>```
-Delete article - DELETE request ```/articles/<int:article_id>```
+Article list - GET request ```/articles/```  
+3rd Party article list - GET request ```/3rd-party-articles/```  
+Article detail view - GET request ```/articles/<int:article_id>```  
+Article list - GET request ```/articles/```  
+Create article - POST request ```/articles/create/```  
+Update article - PATCH request ```/articles/<int:article_id>```  
+Delete article - DELETE request ```/articles/<int:article_id>```  
