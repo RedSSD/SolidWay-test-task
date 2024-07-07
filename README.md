@@ -1,3 +1,4 @@
+# SolidWay Article API Test Task
 #### Please, use your real email for registration (for password restore functionality)
 ##### [**@wannagooutbot**](https://t.me/wannagooutbot) - bot for notifications
 ##### JSON file with requests list for Postman is provided
